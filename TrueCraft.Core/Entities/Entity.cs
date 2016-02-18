@@ -72,6 +72,17 @@ namespace TrueCraft.Core.Entities
 
         public bool Despawned { get; set; }
 
+        private int _Health;
+        public int Health
+        {
+          get { return _Health; }
+          set
+          {
+            _Health = value;
+            OnPropertyChanged("Health");
+          }
+        }
+
         public abstract Size Size { get; }
 
         public abstract IPacket SpawnPacket { get; }
@@ -102,7 +113,9 @@ namespace TrueCraft.Core.Entities
 
         public virtual void Update(IEntityManager entityManager)
         {
-            // TODO: Losing health and all that jazz
+            // TODO: [Losing health and] all that jazz
+            if (Health <= 0)
+                entityManager.DespawnEntity(this);
             if (Position.Y < -50)
                 entityManager.DespawnEntity(this);
         }

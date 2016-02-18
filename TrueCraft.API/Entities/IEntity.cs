@@ -14,6 +14,7 @@ namespace TrueCraft.API.Entities
         float Yaw { get; set; }
         float Pitch { get; set; }
         bool Despawned { get; set; }
+        int Health { get; set; }
         DateTime SpawnTime { get; set; }
         MetadataDictionary Metadata { get; }
         Size Size { get; }

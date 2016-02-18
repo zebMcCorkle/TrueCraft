@@ -3,6 +3,7 @@ using TrueCraft.API.Networking;
 using TrueCraft.API.Server;
 using TrueCraft.Core.Networking.Packets;
 using TrueCraft.API;
+using TrueCraft.API.Entities;
 using TrueCraft.API.World;
 using TrueCraft.Core;
 using TrueCraft.Core.Windows;
@@ -276,6 +277,20 @@ namespace TrueCraft.Handlers
                     server.Clients.Where(c => ((RemoteClient)c).LoggedIn && c.World == _client.World).ToList().ForEach(c => c.QueuePacket(packet));
                 }
             }
+        }
+
+        public static void HandleUseEntityPacket(IPacket _packet, IRemoteClient _client, IMultiplayerServer server)
+        {
+          var packet = (UseEntityPacket)_packet;
+          IEntity entity = null;
+          foreach (IEntityManager manager in server.EntityManagers)
+          {
+            entity = manager.GetEntityByID(packet.TargetID);
+            if (entity != null) break;
+          }
+          if (entity == null) return;
+
+          entity.Health--;
         }
     }
 }

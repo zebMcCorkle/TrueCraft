@@ -24,6 +24,7 @@ namespace TrueCraft.API.Server
         IPacketReader PacketReader { get; }
         IList<IRemoteClient> Clients { get; }
         IList<IWorld> Worlds { get; }
+        IList<IEntityManager> EntityManagers { get; }
         IEventScheduler Scheduler { get; }
         IBlockRepository BlockRepository { get; }
         ICraftingRepository CraftingRepository { get; }
