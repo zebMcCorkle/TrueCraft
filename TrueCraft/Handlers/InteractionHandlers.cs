@@ -282,11 +282,15 @@ namespace TrueCraft.Handlers
         public static void HandleUseEntityPacket(IPacket _packet, IRemoteClient _client, IMultiplayerServer server)
         {
             var packet = (UseEntityPacket)_packet;
+
+            if (!packet.LeftClick)
+                return;
+
             IEntity entity = null;
             IEntityManager manager = null;
             foreach (IEntityManager maybemanager in server.EntityManagers)
             {
-                entity = manager.GetEntityByID(packet.TargetID);
+                entity = maybemanager.GetEntityByID(packet.TargetID);
                 manager = maybemanager;
                 if (entity != null)
                     break;
@@ -296,14 +300,7 @@ namespace TrueCraft.Handlers
             {
                 LivingEntity lentity = (LivingEntity)entity;
                 lentity.Health -= 1;
-                try
-                {
-                    lentity.Update(manager);
-                }
-                catch (Exception e)
-                {
-                    // TODO: Handle errors here
-                }
+                lentity.Update(manager);
             }
         }
     }

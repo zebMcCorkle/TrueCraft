@@ -56,12 +56,13 @@ namespace TrueCraft.Core.Entities
 
         public abstract short MaxHealth { get; }
 
-        public virtual void Update(IEntityManager entityManager)
+        public override void Update(IEntityManager entityManager)
         {
-            ((Entity)this).Update(entityManager);
+            base.Update(entityManager);
 
             if (Health <= 0)
                 entityManager.DespawnEntity(this);
+            entityManager.FlushDespawns();
         }
     }
 }
