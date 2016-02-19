@@ -310,7 +310,10 @@ namespace TrueCraft.Handlers
                 }
                 // TODO: Some utility methods for things like "clients with given chunk loaded"
                 server.Clients.Where(c => ((RemoteClient)c).LoggedIn && c.World == client.World).ToList().ForEach(c => c.QueuePacket(p));
-                manager.Update();
+
+                // For some reason the EntityManager isn't updating properly.
+                if (lentity.Health <= 0)
+                    manager.Update();
             }
         }
     }
