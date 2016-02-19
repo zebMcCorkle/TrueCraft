@@ -301,10 +301,20 @@ namespace TrueCraft.Handlers
             {
                 LivingEntity lentity = (LivingEntity)entity;
                 lentity.Health -= 1;
-                EntityStatusPacket damagePacket = new EntityStatusPacket();
-                damagePacket.EntityID = packet.TargetID;
-                damagePacket.Status = EntityStatusPacket.EntityStatus.EntityHurt;
-                client.QueuePacket(damagePacket);
+                EntityStatusPacket p;
+                if (lentity.Health <= 0)
+                {
+                    p = new EntityStatusPacket();
+                    p.EntityID = packet.TargetID;
+                    p.Status = EntityStatusPacket.EntityStatus.EntityKilled;
+                }
+                else
+                {
+                    p = new EntityStatusPacket();
+                    p.EntityID = packet.TargetID;
+                    p.Status = EntityStatusPacket.EntityStatus.EntityHurt;
+                }
+                client.QueuePacket(p);
                 lentity.Update(manager);
             }
         }
