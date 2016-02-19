@@ -13,6 +13,7 @@ using TrueCraft.Core.Logic.Blocks;
 using System.Linq;
 using TrueCraft.Core.Logic.Items;
 using TrueCraft.Core.Logic;
+using TrueCraft.API.Entities;
 
 namespace TrueCraft.Handlers
 {
@@ -274,6 +275,34 @@ namespace TrueCraft.Handlers
                     }));
                     // TODO: Some utility methods for things like "clients with given chunk loaded"
                     server.Clients.Where(c => ((RemoteClient)c).LoggedIn && c.World == _client.World).ToList().ForEach(c => c.QueuePacket(packet));
+                }
+            }
+        }
+
+        public static void HandleUseEntityPacket(IPacket _packet, IRemoteClient _client, IMultiplayerServer server)
+        {
+            var packet = (UseEntityPacket)_packet;
+            IEntity entity = null;
+            IEntityManager manager = null;
+            foreach (IEntityManager maybemanager in server.EntityManagers)
+            {
+                entity = manager.GetEntityByID(packet.TargetID);
+                manager = maybemanager;
+                if (entity != null)
+                    break;
+            }
+
+            if (entity is LivingEntity)
+            {
+                LivingEntity lentity = (LivingEntity)entity;
+                lentity.Health -= 1;
+                try
+                {
+                    lentity.Update(manager);
+                }
+                catch (Exception e)
+                {
+                    // TODO: Handle errors here
                 }
             }
         }

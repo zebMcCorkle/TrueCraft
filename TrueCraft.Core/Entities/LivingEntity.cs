@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TrueCraft.API.Server;
 
 namespace TrueCraft.Core.Entities
 {
@@ -54,5 +55,13 @@ namespace TrueCraft.Core.Entities
         }
 
         public abstract short MaxHealth { get; }
+
+        public virtual void Update(IEntityManager entityManager)
+        {
+            ((Entity)this).Update(entityManager);
+
+            if (Health <= 0)
+                entityManager.DespawnEntity(this);
+        }
     }
 }
