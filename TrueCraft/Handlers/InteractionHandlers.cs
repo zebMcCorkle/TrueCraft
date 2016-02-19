@@ -293,7 +293,8 @@ namespace TrueCraft.Handlers
             if (entity is LivingEntity)
             {
                 LivingEntity lentity = (LivingEntity)entity;
-                lentity.Health -= 1;
+                lentity.Damage(1, manager);
+
                 EntityStatusPacket p;
                 if (lentity.Health <= 0)
                 {

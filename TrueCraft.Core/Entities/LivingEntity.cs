@@ -57,10 +57,9 @@ namespace TrueCraft.Core.Entities
 
         public abstract short MaxHealth { get; }
 
-        public override void Update(IEntityManager entityManager)
+        public void Damage(short amount, IEntityManager entityManager)
         {
-            base.Update(entityManager);
-
+            Health -= amount;
             if (Health <= 0)
                 entityManager.DespawnEntity(this);
         }
