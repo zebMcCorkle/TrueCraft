@@ -63,7 +63,6 @@ namespace TrueCraft.Core.Entities
 
             if (Health <= 0)
                 entityManager.DespawnEntity(this);
-            entityManager.FlushDespawns();
         }
     }
 }

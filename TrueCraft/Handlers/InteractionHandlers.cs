@@ -286,16 +286,9 @@ namespace TrueCraft.Handlers
 
             if (!packet.LeftClick)
                 return;
-
-            IEntity entity = null;
-            IEntityManager manager = null;
-            foreach (IEntityManager maybemanager in server.EntityManagers)
-            {
-                entity = maybemanager.GetEntityByID(packet.TargetID);
-                manager = maybemanager;
-                if (entity != null)
-                    break;
-            }
+            
+            IEntityManager manager = server.GetEntityManagerForWorld(client.World);
+            IEntity entity = manager.GetEntityByID(packet.TargetID);
 
             if (entity is LivingEntity)
             {
@@ -314,8 +307,9 @@ namespace TrueCraft.Handlers
                     p.EntityID = packet.TargetID;
                     p.Status = EntityStatusPacket.EntityStatus.EntityHurt;
                 }
-                client.QueuePacket(p);
-                lentity.Update(manager);
+                // TODO: Some utility methods for things like "clients with given chunk loaded"
+                server.Clients.Where(c => ((RemoteClient)c).LoggedIn && c.World == client.World).ToList().ForEach(c => c.QueuePacket(p));
+                manager.Update();
             }
         }
     }
