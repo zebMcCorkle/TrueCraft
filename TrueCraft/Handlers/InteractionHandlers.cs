@@ -282,6 +282,7 @@ namespace TrueCraft.Handlers
         public static void HandleUseEntityPacket(IPacket _packet, IRemoteClient _client, IMultiplayerServer server)
         {
             var packet = (UseEntityPacket)_packet;
+            var client = (RemoteClient)_client;
 
             if (!packet.LeftClick)
                 return;
@@ -300,6 +301,10 @@ namespace TrueCraft.Handlers
             {
                 LivingEntity lentity = (LivingEntity)entity;
                 lentity.Health -= 1;
+                EntityStatusPacket damagePacket = new EntityStatusPacket();
+                damagePacket.EntityID = packet.TargetID;
+                damagePacket.Status = EntityStatusPacket.EntityStatus.EntityHurt;
+                client.QueuePacket(damagePacket);
                 lentity.Update(manager);
             }
         }
