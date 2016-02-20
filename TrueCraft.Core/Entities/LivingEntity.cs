@@ -57,11 +57,12 @@ namespace TrueCraft.Core.Entities
 
         public abstract short MaxHealth { get; }
 
-        public void Damage(short amount, IEntityManager entityManager)
+        public void Damage(short amount, IEntityManager entityManager, IMultiplayerServer server)
         {
             Health -= amount;
             if (Health <= 0)
-                entityManager.DespawnEntity(this);
+                server.Scheduler.ScheduleEvent("despawnEntity", this.World.GetChunk(new API.Coordinates2D((int)this.Position.X, (int)this.Position.Z)),
+                    TimeSpan.FromSeconds(0.5), (_server) => entityManager.DespawnEntity(this));
         }
     }
 }

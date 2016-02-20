@@ -293,7 +293,7 @@ namespace TrueCraft.Handlers
             if (entity is LivingEntity)
             {
                 LivingEntity lentity = (LivingEntity)entity;
-                lentity.Damage(1, manager);
+                lentity.Damage(1, manager, server);
 
                 EntityStatusPacket p;
                 if (lentity.Health <= 0)
@@ -309,10 +309,6 @@ namespace TrueCraft.Handlers
                     p.Status = EntityStatusPacket.EntityStatus.EntityHurt;
                 }
                 foreach (RemoteClient c in manager.ClientsForEntity(lentity)) c.QueuePacket(p);
-
-                // For some reason the EntityManager isn't updating properly.
-                if (lentity.Health <= 0)
-                    manager.Update();
             }
         }
     }
