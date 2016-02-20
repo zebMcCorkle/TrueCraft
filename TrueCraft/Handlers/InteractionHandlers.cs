@@ -308,8 +308,7 @@ namespace TrueCraft.Handlers
                     p.EntityID = packet.TargetID;
                     p.Status = EntityStatusPacket.EntityStatus.EntityHurt;
                 }
-                // TODO: Some utility methods for things like "clients with given chunk loaded"
-                server.Clients.Where(c => ((RemoteClient)c).LoggedIn && c.World == client.World).ToList().ForEach(c => c.QueuePacket(p));
+                foreach (RemoteClient c in manager.ClientsForEntity(lentity)) c.QueuePacket(p);
 
                 // For some reason the EntityManager isn't updating properly.
                 if (lentity.Health <= 0)
